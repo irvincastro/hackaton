@@ -1,4 +1,5 @@
 import 'package:app_capa/pages/construccion.dart';
+import 'package:app_capa/pages/detallesTramite.dart';
 import 'package:app_capa/pages/revista.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -35,7 +36,7 @@ class Catalogo extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Construccion()
+          builder: (context) => DetallesTramite(titulo: tramites[index]),
         )
       );
     //}
@@ -73,15 +74,20 @@ class Catalogo extends StatelessWidget {
                 return Card(
                   child: ListTile(
                     leading: CircleAvatar(
-                      child: Text(
-                        "${index+1}",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16
-                        ),
-                      ),
                       backgroundColor: Colors.lightBlueAccent,
+                      radius: 20,
+                      child: CircleAvatar(
+                        radius: 18,
+                        child: Text(
+                          "${index+1}",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16
+                          ),
+                        ),
+                        backgroundColor: Colors.white,
+                      ),
                     ),
                     title: Text(
                       "${tramites[index]}",

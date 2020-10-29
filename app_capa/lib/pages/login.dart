@@ -1,5 +1,7 @@
 import 'package:app_capa/pages/home.dart';
+import 'package:app_capa/pages/recuperar.dart';
 import 'package:app_capa/pages/registro1.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -8,6 +10,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final auth = FirebaseAuth.instance;
+
+  TextEditingController controlEmail = TextEditingController();
+  TextEditingController controlPassword = TextEditingController();
+
   bool obscureText = true;
   List<Organismos> _organismos = Organismos.getOrganismos();
   List<DropdownMenuItem<Organismos>> _dropdownMenuItems;
@@ -124,7 +131,8 @@ class _LoginState extends State<Login> {
                   // autovalidate: autoValidate,
                   // validator: validator,
                   // focusNode: focusNode,
-                  // controller: controller,
+                  keyboardType: TextInputType.emailAddress,
+                  controller: controlEmail,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     hintText: "Correo o contrato",
@@ -162,7 +170,7 @@ class _LoginState extends State<Login> {
                   // autovalidate: autoValidate,
                   // validator: validator,
                   // focusNode: focusNode,
-                  // controller: controller,
+                  controller: controlPassword,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     hintText: "Contraseña",
@@ -214,23 +222,40 @@ class _LoginState extends State<Login> {
               ),
               AppButton(
                 color: Colors.blueAccent,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Home()
-                    )
-                  );
+                onPressed: () async{
+                  var user;
+                  try {
+                    user = await auth.signInWithEmailAndPassword(email: controlEmail.text, password: controlPassword.text);
+                  } catch (e) {
+                    print(e);
+                  }
+                  if(user!=null){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Home()
+                      )
+                    );
+                  }
+                  
                 },
                 name: "Iniciar sesión"
               ),
-              Text(
-                "¿Olvidaste tu contraseña?", 
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
-                  fontSize: 13
+              GestureDetector(
+                child: Text(
+                  "¿Olvidaste tu contraseña?", 
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueAccent,
+                    fontSize: 13
+                  ),
                 ),
+                onTap: (){
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (_)=>Recuperar())
+                  );
+                },
               ),
               SizedBox(height: 20,),
               GestureDetector(

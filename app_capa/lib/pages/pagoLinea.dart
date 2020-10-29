@@ -7,7 +7,8 @@ class PagoLinea extends StatefulWidget {
 }
 
 class _PagoLineaState extends State<PagoLinea> {
-  String  radioGroupValue = "";
+  String radioGroupValue = "";
+  String error = "";
 
   @override
   Widget build(BuildContext context) {
@@ -421,12 +422,28 @@ class _PagoLineaState extends State<PagoLinea> {
                   ),
                 ),
               onPressed: (){
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (_)=>Construccion())
-                );
+                if(radioGroupValue==""){
+                  setState(() {
+                    error = "Seleccione tipo de pago";
+                  });
+                }else{
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (_)=>Construccion())
+                  );
+                }
               }
             ),
+            SizedBox(height: 10),
+            Text(
+              error,
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: 16
+              ),
+            ),
+            SizedBox(height: 10),
             ],
           )
         ),

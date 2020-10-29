@@ -1,5 +1,10 @@
 import 'package:app_capa/pages/registro3.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+
 
 class Registro2 extends StatefulWidget {
   @override
@@ -7,6 +12,8 @@ class Registro2 extends StatefulWidget {
 }
 
 class _Registro2State extends State<Registro2> {
+  final auth = FirebaseAuth.instance;
+
   bool obscureText1 = true;
   bool obscureText2 = true;
   bool checked = false;
@@ -14,6 +21,10 @@ class _Registro2State extends State<Registro2> {
   List<Organismos> _organismos = Organismos.getOrganismos();
   List<DropdownMenuItem<Organismos>> _dropdownMenuItems;
   Organismos _organismoSeleccionado;
+
+  TextEditingController controlEmail = TextEditingController();
+  TextEditingController controlPassword = TextEditingController();
+  TextEditingController controlPrueba = TextEditingController();
 
   @override
   void initState() {
@@ -43,6 +54,7 @@ class _Registro2State extends State<Registro2> {
 
   @override
   Widget build(BuildContext context) {
+    //Firebase.initializeApp();
     return Scaffold(
       appBar: AppBar(
         title: Text("Registrarse en CAPA"),
@@ -260,6 +272,7 @@ class _Registro2State extends State<Registro2> {
                 //width: 200,
                 //padding: EdgeInsets.symmetric(horizontal: 24.0),
                 child: TextFormField(
+                  controller: controlEmail,
                   keyboardType: TextInputType.emailAddress,
                   // autovalidate: autoValidate,
                   // validator: validator,
@@ -377,7 +390,7 @@ class _Registro2State extends State<Registro2> {
                   // autovalidate: autoValidate,
                   // validator: validator,
                   // focusNode: focusNode,
-                  // controller: controller,
+                  controller: controlPassword,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     hintText: "Contraseña",
@@ -522,11 +535,75 @@ Al utilizar este sitio me obligo a cumplir con los términos y condiciones de su
                         fontSize: 16
                       ),
                     ),
-                  onPressed: (){
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (_)=>Registro3())
-                    );
+                  onPressed: ()async{
+                    bool exitoso = false;
+                    String mensajeError = "";
+                    print(controlPrueba.text);
+                    if(controlPrueba.text==""){
+                      print("Vacio");
+                    }
+
+                    try {
+                      //TRY: CREAR UN NUEVO USUARIO
+                      var user = await auth.createUserWithEmailAndPassword(email: controlEmail.text, password: controlPassword.text);
+                      if(user!= null){
+                        exitoso = true;
+
+                      }
+                      //print(user);
+                      print("Registro exitoso");
+
+                      //AGREGAR DATOS A FIRESTORE
+                      CollectionReference users = FirebaseFirestore.instance.collection("usuarios");
+                      users.doc("${controlEmail.text}").set({
+                        "nombre": "Yeah",
+                        "PrimerApellido": "pat",
+                        "tipo": 0,
+                      }).then((value) {
+                        print("User Added");
+                        //Navigator.pop(context);
+                      }).catchError((error) => print("Failed to add user: $error"));
+
+                      //MOSTRAR DATOS DEL USUARIO ACTUAL:
+                      var userActual = auth.currentUser;
+                      print(userActual.email);
+                      print(user.user.email);
+                      
+
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: (_)=>Registro3())
+                      );
+                      //CATCH: Mostrar error al no poder crear nuevo usuario
+                    } catch (e) {
+                      print(e.code);
+                      switch (e.code) {
+                        case 'user-not-found':
+                          mensajeError = "Usuario no encontrado";
+                          break;
+                        case 'wrong-password':
+                          mensajeError = "Contraseña invalida";
+                          break;
+                        case 'network-request-failed':
+                          mensajeError = "Error de red";
+                          break;
+                        case 'email-already-in-use':
+                          mensajeError = "El correo ya está registrado";
+                          break;
+                        case 'invalid-email':
+                          mensajeError = "Correo inválido";
+                          break;
+                        case 'weak-password':
+                          mensajeError = "La contraseña debe contener al menos 6 caracteres";
+                          break;
+                        default:
+                          mensajeError = e.code;
+                      }
+                      print(mensajeError);
+                      print(e);
+                    }
+                    //print(user);
+                    
                   }
                 ),
               ),

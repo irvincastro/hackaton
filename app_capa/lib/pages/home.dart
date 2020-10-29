@@ -1,11 +1,17 @@
+import 'dart:async';
+
 import 'package:app_capa/pages/catalogo.dart';
+import 'package:app_capa/pages/construccion.dart';
+import 'package:app_capa/pages/consultarRecibo.dart';
 import 'package:app_capa/pages/estadoCuenta.dart';
 import 'package:app_capa/pages/facturacion.dart';
 import 'package:app_capa/pages/lecturas.dart';
 import 'package:app_capa/pages/login.dart';
+import 'package:app_capa/pages/pagoLinea.dart';
 import 'package:app_capa/pages/reportes.dart';
 import 'package:app_capa/pages/revista.dart';
 import 'package:app_capa/pages/usuario.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -14,9 +20,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final auth = FirebaseAuth.instance;
   bool inicioSelected = true;
+  
+  // int counter = 0;
+  // Timer timer;
+
+  // void startTimer(BuildContext context){
+  //   timer = Timer.periodic(Duration(seconds:1), (timer) {
+  //     setState(() {
+  //       if(counter==10){
+  //         timer.cancel();
+  //         showDialogHelp(context);
+  //       }else{
+  //         counter++;
+  //       }
+  //     });
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
+    //startTimer(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlueAccent,
@@ -70,12 +95,24 @@ class _HomeState extends State<Home> {
               ),
               onTap: (){
                 print("Consultar recibo");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConsultarRecibo()
+                  )
+                );
               },
             ),
             SizedBox(height: 15),
             GestureDetector(
               onTap: (){
                 print("Pagar recibo");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PagoLinea()
+                  )
+                );
               },
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 70),
@@ -230,7 +267,12 @@ class _HomeState extends State<Home> {
             ListTile(
               leading: Icon(Icons.exit_to_app, color: Colors.redAccent),
               title: Text("Salir"),
-              onTap: (){
+              onTap: ()async{
+                try {
+                  await auth.signOut();
+                } catch (e) {
+                  print(e);
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "740160313627",
+    "firebase_url": "https://hackaton2020capa-13264.firebaseio.com",
+    "project_id": "hackaton2020capa-13264",
+    "storage_bucket": "hackaton2020capa-13264.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740160313627:android:52c357527aa19607049bbe",
+        "android_client_info": {
+          "package_name": "com.example.app_capa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "740160313627-vp1loej7rq12ugbeju8kco9lkf5ingkp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNnakQKbQvLtVtGaZ1ojFpweMaFLrlogI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "740160313627-vp1loej7rq12ugbeju8kco9lkf5ingkp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

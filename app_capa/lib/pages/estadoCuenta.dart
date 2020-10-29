@@ -1,4 +1,6 @@
 import 'package:app_capa/pages/construccion.dart';
+import 'package:app_capa/pages/consultarRecibo.dart';
+import 'package:app_capa/pages/descargarRecibo.dart';
 import 'package:app_capa/pages/facturacion.dart';
 import 'package:app_capa/pages/pagoLinea.dart';
 import 'package:flutter/material.dart';
@@ -517,7 +519,20 @@ class _EstadoCuentaState extends State<EstadoCuenta> {
                             ),
                           ),
                         ),
-                        Text("Data"),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Data",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.red
+                              ),
+                            ),
+                          ),
+                        ),
                       ]
                     ),
                     TableRow(
@@ -552,7 +567,7 @@ class _EstadoCuentaState extends State<EstadoCuenta> {
                       onTap: (){
                         Navigator.push(
                           context, 
-                          MaterialPageRoute(builder: (_)=>Construccion())
+                          MaterialPageRoute(builder: (_)=>ConsultarRecibo())
                         );
                       },
                     ),
@@ -567,7 +582,7 @@ class _EstadoCuentaState extends State<EstadoCuenta> {
                       onTap: (){
                         Navigator.push(
                           context, 
-                          MaterialPageRoute(builder: (_)=>Construccion())
+                          MaterialPageRoute(builder: (_)=>DescargarRecibo())
                         );
                       },
                     ),
