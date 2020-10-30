@@ -34,6 +34,12 @@ dependencies:
   cloud_firestore:
   firebase_auth:
   firebase_core:
+  validators:
+  firebase_storage:
+  image_cropper:
+  image_picker:
+  geolocator:
+  charts_flutter:
 
 
 dev_dependencies:
